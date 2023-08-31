@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# List file in current directory
+
+current=$(ls)
+for idx in $current; do
+  echo "$idx" | cut -d '-' -f2
+done
