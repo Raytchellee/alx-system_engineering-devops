@@ -3,4 +3,4 @@
 
 while read curr_file; do
   echo "$curr_file" | cut -d ':' -f1,3,6
-done < /etc/passwd
+done < "/etc/passwd"
