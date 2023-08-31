@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-# This script is displaying "Best School" 10 times
+# This script is displaying "Hi" on the 9th iteration
 
 ((idx = 0))
 while ((idx < 10)); do
       echo "Best School"
+      if ((idx == 8)); then echo "Hi"; fi
       ((idx++))
 done
