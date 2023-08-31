@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Displays bad or good luck or Best School
+
+((idx = 0))
+while ((idx < 10)); do
+      if ((idx == 3)); then echo "bad luck";
+      elif ((idx == 7)); then echo "good luck";
+      else echo "Best School"; fi
+      ((idx++))
+done
