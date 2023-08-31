@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# only display username, user id, Home directory
+# Only display username, user id, Home directory
 
 while read curr_file; do
   echo "$curr_file" | cut -d ':' -f1,3,6
