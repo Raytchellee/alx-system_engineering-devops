@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Displays hours and minutes
+
+((hr = 0))
+while ((hr < 13)); do
+    ((min = 1))
+    echo "Hour: $hr"
+    while ((min < 60)); do
+      	echo "$min"
+	((min++))
+    done
+    ((hr++))
+done
