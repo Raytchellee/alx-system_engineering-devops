@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
-# Only display username, user id, Home directory
+# only display username, user id, Home directory
 
-exec < /etc/passwd
-
-while read -r curr_file ; do
-	echo "$curr_file" | cut -d':' -f1,3,6
-done
+while read -r curr_file; do
+  echo "$curr_file" | cut -d ':' -f1,3,6
+done < /etc/passwd
