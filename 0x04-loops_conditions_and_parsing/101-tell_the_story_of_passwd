@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Talks about etc/passwd content
+
+while IFS=':' read -r USER_NAME PASS_WD USER_ID GRP_ID USR_INFO HOM_DIR CMD_SHELL; do
+  echo "The user $USER_NAME is part of the $GRP_ID gang,"\
+  "lives in $HOM_DIR and rides $CMD_SHELL."\
+  "$USER_ID's place is protected by the passcode $PASS_WD,"\
+  "more info about the user here: $USR_INFO"
+done < /etc/passwd
