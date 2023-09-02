@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# displays processses
+
+ps -afux

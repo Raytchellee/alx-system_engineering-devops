@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# shows bash id
+
+ps -afux | grep bash
