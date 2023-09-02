@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# kill the prvious file in style
+
+pkill -f 7-highlander
