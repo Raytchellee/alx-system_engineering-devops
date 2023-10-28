@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Trying to configure without authentication
+
+Host 100.26.167.206
+IdentityFile ~/.ssh/school
+PasswordAuthentication no
