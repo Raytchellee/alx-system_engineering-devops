@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# 396785-lb-01 configuration
+
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get -y install haproxy
+sudo cp /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg.original2
+echo "
+listen 396785-lb-01
+        bind 0:80
+        mode http
+        stats enable
+        balance roundrobin
+        option forwardfor
+        option httpclose
+        server 396785-web-01 100.26.167.206 check port 80
+        server 396785-web-02 100.26.161.102 check port 80
+" >> /etc/haproxy/haproxy.cfg
+sudo service haproxy restart
