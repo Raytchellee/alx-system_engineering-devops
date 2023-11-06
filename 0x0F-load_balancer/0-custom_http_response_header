@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+#Configuring server to run new host
+
+sudo apt-get update -y
+sudo apt-get -y install nginx
+sudo sed -i "47i\\\tadd_header X-Served-By $HOSTNAME;" /etc/nginx/sites-available/default
+echo "Hello World!" | tee /var/www/html/index.nginx-debian.html
+echo "Ceci n'est pas une page" > /var/www/html/404.html
+sudo service nginx restart
