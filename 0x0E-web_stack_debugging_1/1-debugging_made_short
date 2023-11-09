@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 #mak it listen with even less command
-
 sudo sed -i 's/8080/80/g' /etc/nginx/sites-enabled/default
 sudo service nginx restart
 sudo pkill -o nginx
