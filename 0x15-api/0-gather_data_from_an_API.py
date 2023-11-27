@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """gets info by id"""
-from sys import argv
 import requests
+from sys import argv
 
 if __name__ == "__main__":
     link = "https://jsonplaceholder.typicode.com/"
