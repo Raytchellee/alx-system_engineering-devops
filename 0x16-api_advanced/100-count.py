@@ -1,27 +1,30 @@
 #!/usr/bin/python3
-""" Module for a function that queries the Reddit API recursively."""
-
+"""Gets total words in hot posts of a subreddit"""
 import requests
 
-def count_words(subreddit, keywords, after='', word_count={}):
-    """ Queries the Reddit API, parses hot article titles, and prints sorted counts of given keywords"""
+def count_words(subreddit, keywords, next='', obj={}):
+    """ Gets total words in hot posts of a subreddit recursively"""
 
-    if not word_count:
-        for keyword in keywords:
-            if keyword.lower() not in word_count:
-                word_count[keyword.lower()] = 0
+    if not obj:
+        for k in keywords:
+            if k.lower() not in obj:
+                obj[k.lower()] = 0
 
-    if after is None:
-        sorted_counts = sorted(word_count.items(), key=lambda x: (-x[1], x[0]))
-        for word, count in sorted_counts:
-            if count:
-                print('{}: {}'.format(word, count))
+    if next is None:
+        count = sorted(obj.items(), key=lambda x: (-x[1], x[0]))
+        for w, c in count:
+            if c:
+                print('{}: {}'.format(w, c))
         return None
 
-    url = 'https://www.reddit.com/r/{}/hot/.json'.format(subreddit)
-    header = {'user-agent': 'redquery'}
-    parameters = {'limit': 100, 'after': after}
-    response = requests.get(url, headers=header, params=parameters, allow_redirects=False)
+    link = 'https://www.reddit.com/r/{}/hot/.json'.format(subreddit)
+    h = {'user-agent': '0x16-api_advanced/0.0.1 (by /u/raytchellee)'}
+    p = {'limit': 100, 'after': next}
+
+    response = requests.get(link,
+                            headers=h,
+                            params=p,
+                            allow_redirects=False)
 
     if response.status_code != 200:
         return None
@@ -31,12 +34,12 @@ def count_words(subreddit, keywords, after='', word_count={}):
         next_token = response.json()['data']['after']
         for post in hot_posts:
             title = post['data']['title']
-            lowercase_words = [word.lower() for word in title.split(' ')]
+            lc = [word.lower() for word in title.split(' ')]
 
-            for keyword in word_count.keys():
-                word_count[keyword] += lowercase_words.count(keyword)
+            for keyword in obj.keys():
+                obj[keyword] += lc.count(keyword)
 
     except Exception:
         return None
-
-    count_words(subreddit, keywords, next_token, word_count)
+    
+    count_words(subreddit, keywords, next_token, obj)
