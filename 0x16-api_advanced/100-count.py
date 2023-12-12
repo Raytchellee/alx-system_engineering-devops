@@ -1,61 +1,55 @@
 #!/usr/bin/python3
-""" Count it! """
+"""Gets total words in hot posts of a subreddit"""
 from requests import get
 
-REDDIT = "https://www.reddit.com/"
-HEADERS = {'user-agent': 'my-app/0.0.1'}
 
+def count_words(subreddit, word_list, cont="", obj={}):
+    """
+    Gets total words in hot posts of a subreddit recursively.
+    If no result return nothing
+    """
 
-def count_words(subreddit, word_list, after="", word_dic={}):
-    """
-    Returns a list containing the titles of all hot articles for a
-    given subreddit. If no results are found for the given subreddit,
-    the function should return None.
-    """
-    if not word_dic:
+    if not obj:
         for word in word_list:
-            word_dic[word] = 0
+            obj[word] = 0
 
-    if after is None:
-        word_list = [[key, value] for key, value in word_dic.items()]
-        word_list = sorted(word_list, key=lambda x: (-x[1], x[0]))
-        for w in word_list:
-            if w[1]:
-                print("{}: {}".format(w[0].lower(), w[1]))
+    if cont is None:
+        word_list = [[a, b] for a, b in obj.items()]
+        word_list = sorted(word_list, key=lambda y: (-y[1], y[0]))
+        for word in word_list:
+            if word[1]:
+                print("{}: {}".format(word[0].lower(), word[1]))
         return None
 
-    url = REDDIT + "r/{}/hot/.json".format(subreddit)
-
-    params = {
+    link = "https://www.reddit.com/r/{}/hot/.json".format(subreddit)
+    p = {
         'limit': 100,
-        'after': after
+        'after': cont
     }
+    h = {
+        'user-agent': '0x16-api_advanced/0.0.1 (by /u/raytchellee)'
+    }
+    res = get(link, headers=h, params=p, allow_redirects=False)
 
-    r = get(url, headers=HEADERS, params=params, allow_redirects=False)
-
-    if r.status_code != 200:
+    if res.status_code != 200:
         return None
-
     try:
-        js = r.json()
-
+        json_data = res.json()
     except ValueError:
         return None
 
     try:
+        result = json_data.get("data")
+        next = result.get("after")
+        props = result.get("children")
+        for prop in props:
+            post = prop.get("data")
+            t = post.get("title")
+            lc = [word.lower() for word in t.split(' ')]
 
-        data = js.get("data")
-        after = data.get("after")
-        children = data.get("children")
-        for child in children:
-            post = child.get("data")
-            title = post.get("title")
-            lower = [s.lower() for s in title.split(' ')]
-
-            for w in word_list:
-                word_dic[w] += lower.count(w.lower())
-
+            for word in word_list:
+                obj[word] += lc.count(word.lower())
     except:
         return None
 
-    count_words(subreddit, word_list, after, word_dic)
+    count_words(subreddit, word_list, next, obj)
