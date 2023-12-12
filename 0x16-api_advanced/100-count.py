@@ -12,7 +12,7 @@ def count_words(subreddit, keywords, cont='', obj={}):
                 obj[k.lower()] = 0
 
     if cont is None:
-        count = sorted(obj.items(), key=lambda x: (-x[1], x[0]))
+        count = sorted(obj.items(), key=lambda y: (-y[1], y[0]))
         for w, c in count:
             if c:
                 print('{}: {}'.format(w, c))
@@ -33,8 +33,8 @@ def count_words(subreddit, keywords, cont='', obj={}):
     try:
         hot_posts = response.json()['data']['children']
         next_token = response.json()['data']['after']
-        for post in hot_posts:
-            title = post['data']['title']
+        for p in hot_posts:
+            title = p['data']['title']
             lc = [word.lower() for word in title.split(' ')]
 
             for keyword in obj.keys():
