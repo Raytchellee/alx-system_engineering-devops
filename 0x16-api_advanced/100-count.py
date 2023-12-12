@@ -1,48 +1,46 @@
 #!/usr/bin/python3
-""" Module for a recursive function that queries the Reddit API and counts keywords."""
+"""Gets total words in hot posts of a subreddit"""
 import requests
 
-def count_words(subreddit, word_list, after=None, counts=None):
-    """ Recursive function to count keywords in hot articles on Reddit.
 
-    Args:
-        subreddit (str): The subreddit to query.
-        word_list (list): List of keywords to count.
-        after (str): Token for pagination in the query.
-        counts (dict): Dictionary to store counts of keywords.
+def count_words(subreddit, keywords, cont='', obj={}):
+    """ Gets total words in hot posts of a subreddit recursively"""
 
-    Returns:
-        None: Prints sorted counts of keywords in descending order by count and alphabetically for ties.
-    """
+    if not obj:
+        for k in keywords:
+            if k.lower() not in obj:
+                obj[k.lower()] = 0
 
-    if counts is None:
-        counts = {}
+    if cont is None:
+        count = sorted(obj.items(), key=lambda x: (-x[1], x[0]))
+        for w, c in count:
+            if c:
+                print('{}: {}'.format(w, c))
+        return None
 
-    if after is None:
-        sorted_counts = sorted(counts.items(), key=lambda x: (-x[1], x[0]))
-        for word, count in sorted_counts:
-            print('{}: {}'.format(word, count))
-        return
+    link = 'https://www.reddit.com/r/{}/hot/.json'.format(subreddit)
+    h = {'user-agent': '0x16-api_advanced/0.0.1 (by /u/raytchellee)'}
+    p = {'limit': 100, 'after': cont}
 
-    url = 'https://www.reddit.com/r/{}/hot/.json'.format(subreddit)
-    headers = {'User-Agent': 'myRedditBot'}
-    params = {'limit': 100, 'after': after}
-    response = requests.get(url, headers=headers, params=params, allow_redirects=False)
+    response = requests.get(link,
+                            headers=h,
+                            params=p,
+                            allow_redirects=False)
 
     if response.status_code != 200:
-        print("Invalid subreddit or no posts match.")
-        return
+        return None
 
     try:
         hot_posts = response.json()['data']['children']
         next_token = response.json()['data']['after']
         for post in hot_posts:
-            title = post['data']['title'].lower()
-            for word in word_list:
-                counts[word] = counts.get(word, 0) + title.count(word.lower())
+            title = post['data']['title']
+            lc = [word.lower() for word in title.split(' ')]
 
-    except Exception as e:
-        print(e)
-        return
+            for keyword in obj.keys():
+                obj[keyword] += lc.count(keyword)
 
-    count_words(subreddit, word_list, next_token, counts)
+    except Exception:
+        return None
+
+    count_words(subreddit, keywords, next_token, obj)
