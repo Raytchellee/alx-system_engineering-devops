@@ -3,7 +3,7 @@
 import requests
 
 
-def count_words(subreddit, keywords, next='', obj={}):
+def count_words(subreddit, keywords, cont='', obj={}):
     """ Gets total words in hot posts of a subreddit recursively"""
 
     if not obj:
@@ -11,7 +11,7 @@ def count_words(subreddit, keywords, next='', obj={}):
             if k.lower() not in obj:
                 obj[k.lower()] = 0
 
-    if next is None:
+    if cont is None:
         count = sorted(obj.items(), key=lambda x: (-x[1], x[0]))
         for w, c in count:
             if c:
@@ -20,7 +20,7 @@ def count_words(subreddit, keywords, next='', obj={}):
 
     link = 'https://www.reddit.com/r/{}/hot/.json'.format(subreddit)
     h = {'user-agent': '0x16-api_advanced/0.0.1 (by /u/raytchellee)'}
-    p = {'limit': 100, 'after': next}
+    p = {'limit': 100, 'after': cont}
 
     response = requests.get(link,
                             headers=h,
