@@ -6,13 +6,13 @@ from requests import get
 def count_words(subreddit, target_words, cont="", obj=None):
     """
     Gets total words in hot posts of a subreddit recursively.
-    If no result return nothing
+    If no result return nothing/empty
     """
     if obj is None:
         obj = {word: 0 for word in target_words}
 
     if cont is None:
-        target_words_sorted = sorted(obj.items(), key=lambda x: (-x[1], x[0]))
+        target_words_sorted = sorted(obj.items(), key=lambda y: (-y[1], y[0]))
         for word, count in target_words_sorted:
             if count:
                 print(f"{word.lower()}: {count}")
@@ -20,8 +20,8 @@ def count_words(subreddit, target_words, cont="", obj=None):
 
     link = f"https://www.reddit.com/r/{subreddit}/hot/.json"
     p = {
-        'limit': 100,
-        'after': cont
+        'after': cont,
+        'limit': 100
     }
     h = {
         'user-agent': '0x16-api_advanced/0.0.1 (by /u/raytchellee)'
@@ -46,10 +46,10 @@ def count_words(subreddit, target_words, cont="", obj=None):
         for prop in props:
             post = prop.get("data")
             title = post.get("title")
-            lowercased_words = [word.lower() for word in title.split(' ')]
+            lc = [word.lower() for word in title.split(' ')]
 
             for word in target_words:
-                obj[word] += lowercased_words.count(word.lower())
+                obj[word] += lc.count(word.lower())
     except:
         return None
 
