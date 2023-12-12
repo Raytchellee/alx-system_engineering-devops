@@ -44,8 +44,8 @@ def count_words(subreddit, target_words, cont="", obj=None):
         props = result.get("children")
         next_page = result.get("after")
         for prop in props:
-            post = prop.get("data")
-            title = post.get("title")
+            data = prop.get("data")
+            title = data.get("title")
             lc = [word.lower() for word in title.split(' ')]
 
             for word in target_words:
