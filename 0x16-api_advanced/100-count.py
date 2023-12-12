@@ -2,6 +2,7 @@
 """Gets total words in hot posts of a subreddit"""
 import requests
 
+
 def count_words(subreddit, keywords, next='', obj={}):
     """ Gets total words in hot posts of a subreddit recursively"""
 
@@ -41,5 +42,5 @@ def count_words(subreddit, keywords, next='', obj={}):
 
     except Exception:
         return None
-    
+
     count_words(subreddit, keywords, next_token, obj)
