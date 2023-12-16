@@ -63,3 +63,5 @@ Establish a clear communication protocol for incident escalation.
 
 ## Conclusion
 This postmortem outlines the incident's timeline, root cause, resolution, and steps taken for improvement. By implementing the suggested measures, we aim to fortify our infrastructure and reduce the likelihood of similar incidents in the future.
+
+You can find medium post here https://medium.com/@raytchellee/postmortem-web-stack-outage-incident-5cfb90263af5
