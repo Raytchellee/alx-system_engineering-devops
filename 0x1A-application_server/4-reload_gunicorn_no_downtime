@@ -1,5 +1,22 @@
 #!/usr/bin/env bash
 # Reloading gunicorn
 
+# Get the process IDs
+gpid=$(pgrep gunicorn)
 
-ps aux | grep gunicorn | awk '{ print $2 }' | xargs kill -HUP
+if [ -z "$gpid" ]; then
+    echo "No process available"
+    exit 1
+fi
+
+# Stopping the old workers
+echo "Stopping active workers..."
+for pid in $gpid; do
+    kill -HUP "$pid"
+done
+
+# Await pending workers
+echo "Awaiting process termination"
+sleep 5
+
+echo "Reload completed gracefully"
