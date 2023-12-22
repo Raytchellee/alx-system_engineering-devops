@@ -1,22 +1,4 @@
 #!/usr/bin/env bash
 # Reloading gunicorn
 
-# Get the process IDs
-gpid=$(pgrep gunicorn)
-
-if [ -z "$gpid" ]; then
-    echo "No Gunicorn processes found."
-    exit 1
-fi
-
-# Stopping the old workers
-echo "Stopping old workers gracefully..."
-for pid in $gpid; do
-    kill -HUP "$pid"
-done
-
-# Await pending workers
-echo "Waiting for old workers to finish processing..."
-sleep 5
-
-echo "Graceful reload complete"
+ps aux | grep gunicorn | awk '{ print $2 }' | xargs kill -HUP
